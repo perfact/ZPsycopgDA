@@ -207,7 +207,7 @@ class DB(TM, dbi_db.DB):
         # database failed, getconn() will fail also.
         try:
             conn = self.getconn(False)
-        except psycopg2.OperationalError:
+        except psycopg2.Error:
             LOG.error('getconn() failed during abort.')
             return
 
@@ -315,6 +315,10 @@ class DB(TM, dbi_db.DB):
         ) or (
             name == 'InterfaceError' and (
                 'connection already closed' in value
+            )
+        ) or (
+            name == 'NotSupportedError' and (
+                'cannot set transaction read-write mode' in value
             )
         )
         if connection_closed_error:
