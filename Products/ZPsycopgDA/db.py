@@ -203,7 +203,14 @@ class DB(TM, dbi_db.DB):
             self._commit(put_connection=True)
 
     def _abort(self, *ignored):
-        conn = self.getconn(False)
+        # In cases where the _abort() occurs because the connection to the
+        # database failed, getconn() will fail also.
+        try:
+            conn = self.getconn(False)
+        except psycopg2.OperationalError:
+            LOG.error('getconn() failed during abort.')
+            return
+
         try:
             if self.use_tpc:
                 # TODO An error can occur if this connector
