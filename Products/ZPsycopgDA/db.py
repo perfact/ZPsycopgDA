@@ -310,8 +310,13 @@ class DB(TM, dbi_db.DB):
 
         # Errors that only affect our connection and where an immediate retry
         # should work.
+        # AdminShutdown sounds bad, but it might only be our connection that is
+        # affected. When reconnecting after a regular Retry we see if it
+        # acutually something serious, in which case we will get something like
+        # 'the database is shutting down'. If it is only our connection, a
+        # simple reconnect will work.
         connection_error = (
-            name == 'OperationalError' and (
+            name in ('AdminShutdown', 'OperationalError') and (
                 'server closed the connection' in value or
                 'terminating connection due to administrator command' in value
             )
