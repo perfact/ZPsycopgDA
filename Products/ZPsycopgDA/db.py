@@ -387,28 +387,33 @@ class DB(TM, dbi_db.DB):
         self._register()
         self.calls = self.calls+1
 
-        try:
-            return self.query_inner(query_string, max_rows, query_data)
-        except Exception as err:
-            conn = self.getconn()
-            if ((conn not in self.in_transaction)
-                    and self.is_connection_error(err)):
-                LOG.warning(
-                    "Connection error on first query in transaction, "
-                    "reconnecting."
-                )
-                self.putconn(close=True)
-                return self.query(query_string, max_rows, query_data)
+        for retry in range(2):
+            try:
+                return self.query_inner(query_string, max_rows, query_data)
+            except Exception as err:
+                conn = self.getconn()
+                # First query in transaction yields a connection error - try to
+                # simply reconnect
+                if ((conn not in self.in_transaction)
+                        and self.is_connection_error(err)):
+                    LOG.warning(
+                        "Connection error on first query in transaction, "
+                        "reconnecting."
+                    )
+                    self.putconn(close=True)
+                    continue
+                break
 
-            self.handle_retry(err)
-            self._abort()
+        # We only reach this if another error occured
+        self.handle_retry(err)
+        self._abort()
 
-            # Taint this transaction
-            LOG.warning('query() tainting: {} in {}'.format(
-                conn, self.tainted))
-            if conn not in self.tainted:
-                self.tainted.append(conn)
-            raise err
+        # Taint this transaction
+        LOG.warning('query() tainting: {} in {}'.format(
+            conn, self.tainted))
+        if conn not in self.tainted:
+            self.tainted.append(conn)
+        raise err
 
 
     def query_inner(self, query_string, max_rows=None, query_data=None):
@@ -431,10 +436,7 @@ class DB(TM, dbi_db.DB):
 
             if self.autocommit:
                 # LOG.info('Autocommitting.')
-                try:
-                    self._commit()
-                except Exception as err:
-                    raise
+                self._commit()
 
             if c.description is not None:
                 nselects += 1
