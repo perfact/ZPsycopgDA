@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.4.7.dev1+perfact.2
+--------------------
+
+Directly reconnect broken connections if this is the first query in the
+transaction instead of directly raising a RetryError.
+
+
 2.4.7.dev1+perfact.1
 -------------------
 Collection of PerFact patches to the Product, including reorganization of how
