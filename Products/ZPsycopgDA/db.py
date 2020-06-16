@@ -387,10 +387,12 @@ class DB(TM, dbi_db.DB):
         self._register()
         self.calls = self.calls+1
 
+        error = None
         for retry in range(2):
             try:
                 return self.query_inner(query_string, max_rows, query_data)
             except Exception as err:
+                error = err
                 conn = self.getconn()
                 # First query in transaction yields a connection error - try to
                 # simply reconnect
@@ -405,7 +407,7 @@ class DB(TM, dbi_db.DB):
                 break
 
         # We only reach this if another error occured
-        self.handle_retry(err)
+        self.handle_retry(error)
         self._abort()
 
         # Taint this transaction
