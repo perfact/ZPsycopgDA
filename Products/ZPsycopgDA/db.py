@@ -415,7 +415,7 @@ class DB(TM, dbi_db.DB):
             conn, self.tainted))
         if conn not in self.tainted:
             self.tainted.append(conn)
-        raise err
+        raise error
 
 
     def query_inner(self, query_string, max_rows=None, query_data=None):
