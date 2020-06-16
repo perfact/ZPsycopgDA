@@ -16,7 +16,7 @@
 # their work without bothering about the module dependencies.
 
 __doc__ = "ZPsycopg Database Adapter Registration."
-__version__ = '2.4.7.dev1+perfact.2'
+__version__ = '2.4.7.dev1+perfact.3'
 
 # Python2 backward compatibility
 try:

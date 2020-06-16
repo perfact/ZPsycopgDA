@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.4.7.dev1+perfact.3
+--------------------
+
+Bugfix for `UnboundLocalError` in Python 3
+
 2.4.7.dev1+perfact.2
 --------------------
 
