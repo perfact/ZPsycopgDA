@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.4.7.dev1+perfact.6
+--------------------
+
+Catch another class of serialization errors that have been observed on specific
+systems.
+
+
 2.4.7.dev1+perfact.5
 --------------------
 

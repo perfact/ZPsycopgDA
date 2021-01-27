@@ -357,8 +357,8 @@ class DB(TM, dbi_db.DB):
         '''
         (name, value) = DB.split_error(error)
         return (
-            name == 'TransactionRollbackError' and
-            'could not serialize' in value
+            name in ('TransactionRollbackError', 'SerializationFailure')
+            and 'could not serialize' in value
         )
 
 
