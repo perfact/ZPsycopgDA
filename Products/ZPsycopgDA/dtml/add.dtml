@@ -59,14 +59,14 @@
     <div class="form-group row">
       <label for="check" class="form-label col-sm-4 col-md-3">Connect immediately</label>
       <div class="col-sm-5 col-md-1">
-        <input class="btn btn-primary" type="checkbox" id="check" name="check" value="YES" checked="checked" class="form-control"/>
+        <input class="btn btn-primary" type="checkbox" id="check" name="check" value="YES" checked="checked" />
       </div>
     </div>
 
     <div class="form-group row">
       <label for="zdatetime" class="form-label col-sm-4 col-md-3">Use Zope's internal DateTime</label>
       <div class="col-sm-5 col-md-1">
-        <input class="btn btn-primary" type="checkbox" id="zdatetime" name="zdatetime" value="YES" checked="checked" class="form-control"/>
+        <input class="btn btn-primary" type="checkbox" id="zdatetime" name="zdatetime" value="YES" checked="checked" />
       </div>
     </div>
 
@@ -90,21 +90,21 @@
     <div class="form-group row">
       <label for="autocommit" class="form-label col-sm-4 col-md-3">Auto-commit each query</label>
       <div class="col-sm-5 col-md-1">
-        <input class="btn btn-primary" type="checkbox" id="autocommit" name="autocommit" value="YES" checked="checked" class="form-control"/>
+        <input class="btn btn-primary" type="checkbox" id="autocommit" name="autocommit" value="YES" checked="checked" />
       </div>
     </div>
 
     <div class="form-group row">
       <label for="readonlymode" class="form-label col-sm-4 col-md-3">Read-only mode</label>
       <div class="col-sm-5 col-md-1">
-        <input class="btn btn-primary" type="checkbox" id="readonlymode" name="readonlymode" value="YES" checked="checked" class="form-control"/>
+        <input class="btn btn-primary" type="checkbox" id="readonlymode" name="readonlymode" value="YES" checked="checked" />
       </div>
     </div>
 
     <div class="form-group row">
       <label for="use_tpc" class="form-label col-sm-4 col-md-3">Use Two-Phase Commit</label>
       <div class="col-sm-8 col-md-9">
-        <input class="btn btn-primary" type="checkbox" id="use_tpc" name="use_tpc" value="YES" checked="checked" class="form-control"/>
+        <input class="btn btn-primary" type="checkbox" id="use_tpc" name="use_tpc" value="YES" checked="checked" />
         <small class="d-block">
           Note: "Two-Phase Commit" uses <samp>PREPARE TRANSACTION</samp>, which
           has some limitations (no <samp>NOTIFY</samp> or <samp>LISTEN</samp> is possible),
