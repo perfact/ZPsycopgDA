@@ -325,6 +325,7 @@ class DB(TM, dbi_db.DB):
             'OperationalError',
             'InterfaceError'
         ) and (
+            'SSL SYSCALL error' in value or
             'server closed the connection' in value or
             'terminating connection due to administrator command' in value or
             'connection already closed' in value
