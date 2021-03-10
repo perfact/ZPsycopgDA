@@ -1,18 +1,15 @@
 <dtml-var manage_page_header>
 
 <dtml-var "manage_form_title(this(), _,
-           form_title='Add Z Psycopg 2 Database Connection',
-           help_product='ZPsycopgDA',
-           help_topic='ZPsycopgDA-Method-Add.stx'
-           )">
+           form_title='Add Z Psycopg 2 Database Connection')">
 
 <main class="container-fluid">
 
   <p class="form-help">
     A Zope Psycopg 2 Database Connection is used to connect and execute
-    queries on a PostgreSQL database. In the form below <em>Connection String</em> 
-    (also called the Data Source Name or DSN for short) is a string containing 
-    the connection parameters, for example: 
+    queries on a PostgreSQL database. In the form below <em>Connection String</em>
+    (also called the Data Source Name or DSN for short) is a string containing
+    the connection parameters, for example:
     <samp>“dbname=test user=postgres password=secret”</samp>
   </p>
 
@@ -20,7 +17,7 @@
     <div class="form-group row">
       <label for="id" class="form-label col-sm-4 col-md-3">Id</label>
       <div class="col-sm-8 col-md-9">
-        <input id="id" class="form-control" type="text" name="id" 
+        <input id="id" class="form-control" type="text" name="id"
           placeholder="Psycopg2_database_connection"
           value="Psycopg2_database_connection" />
       </div>
@@ -29,7 +26,7 @@
     <div class="form-group row">
       <label for="title" class="form-label col-sm-4 col-md-3">Title</label>
       <div class="col-sm-8 col-md-9">
-        <input id="title" class="form-control" type="text" name="title" 
+        <input id="title" class="form-control" type="text" name="title"
           placeholder="Z Psycopg 2 Database Connection"
           value="Z Psycopg 2 Database Connection" />
       </div>
@@ -38,8 +35,8 @@
     <div class="form-group row">
       <label for="connection_string" class="form-label col-sm-4 col-md-3">Connection string</label>
       <div class="col-sm-8 col-md-9">
-        <input id="connection_string" class="form-control" type="text" name="connection_string" 
-          placeholder="dbname=test user=postgres password=secret" 
+        <input id="connection_string" class="form-control" type="text" name="connection_string"
+          placeholder="dbname=test user=postgres password=secret"
           value="" />
         <small>
           The basic connection parameters are:
@@ -62,14 +59,14 @@
     <div class="form-group row">
       <label for="check" class="form-label col-sm-4 col-md-3">Connect immediately</label>
       <div class="col-sm-5 col-md-1">
-        <input class="btn btn-primary" type="checkbox" id="check" name="check" value="YES" checked="YES" class="form-control"/>
+        <input class="btn btn-primary" type="checkbox" id="check" name="check" value="YES" checked="checked" class="form-control"/>
       </div>
     </div>
 
     <div class="form-group row">
       <label for="zdatetime" class="form-label col-sm-4 col-md-3">Use Zope's internal DateTime</label>
       <div class="col-sm-5 col-md-1">
-        <input class="btn btn-primary" type="checkbox" id="zdatetime" name="zdatetime" value="YES" checked="YES" class="form-control"/>
+        <input class="btn btn-primary" type="checkbox" id="zdatetime" name="zdatetime" value="YES" checked="checked" class="form-control"/>
       </div>
     </div>
 
@@ -79,12 +76,12 @@
         <select class="form-control" id="tilevel" name="tilevel:int">
           <option value="4">Read uncommitted</option>
           <option value="1">Read committed</option>
-          <option value="2" selected="YES">Repeatable read</option>
+          <option value="2" selected="selected">Repeatable read</option>
           <option value="3">Serializable</option>
         </select>
         <small>
-          Note: Unless your server is capable of retries (Setting <samp>max-conflict-retries</samp> 
-          in zope.conf), you should not use <samp>repeatable read</samp> or <samp>serializable</samp>, 
+          Note: Unless your server is capable of retries (Setting <samp>max-conflict-retries</samp>
+          in zope.conf), you should not use <samp>repeatable read</samp> or <samp>serializable</samp>,
           because both can produce random errors on contradicting transactions.
         </small>
       </div>
@@ -93,25 +90,25 @@
     <div class="form-group row">
       <label for="autocommit" class="form-label col-sm-4 col-md-3">Auto-commit each query</label>
       <div class="col-sm-5 col-md-1">
-        <input class="btn btn-primary" type="checkbox" id="autocommit" name="autocommit" value="YES" checked="YES" class="form-control"/>
+        <input class="btn btn-primary" type="checkbox" id="autocommit" name="autocommit" value="YES" checked="checked" class="form-control"/>
       </div>
     </div>
 
     <div class="form-group row">
       <label for="readonlymode" class="form-label col-sm-4 col-md-3">Read-only mode</label>
       <div class="col-sm-5 col-md-1">
-        <input class="btn btn-primary" type="checkbox" id="readonlymode" name="readonlymode" value="YES" checked="YES" class="form-control"/>
+        <input class="btn btn-primary" type="checkbox" id="readonlymode" name="readonlymode" value="YES" checked="checked" class="form-control"/>
       </div>
     </div>
 
     <div class="form-group row">
       <label for="use_tpc" class="form-label col-sm-4 col-md-3">Use Two-Phase Commit</label>
       <div class="col-sm-8 col-md-9">
-        <input class="btn btn-primary" type="checkbox" id="use_tpc" name="use_tpc" value="YES" checked="YES" class="form-control"/>
+        <input class="btn btn-primary" type="checkbox" id="use_tpc" name="use_tpc" value="YES" checked="checked" class="form-control"/>
         <small class="d-block">
-          Note: "Two-Phase Commit" uses <samp>PREPARE TRANSACTION</samp>, which 
-          has some limitations (no <samp>NOTIFY</samp> or <samp>LISTEN</samp> is possible), 
-          and needs special provisions to clean up orphaned prepared transactions. 
+          Note: "Two-Phase Commit" uses <samp>PREPARE TRANSACTION</samp>, which
+          has some limitations (no <samp>NOTIFY</samp> or <samp>LISTEN</samp> is possible),
+          and needs special provisions to clean up orphaned prepared transactions.
           Use with care.
         </small>
       </div>
@@ -121,7 +118,7 @@
       <label for="encoding" class="form-label col-sm-4 col-md-3">Encoding</label>
       <div class="col-sm-8 col-md-9">
         <input id="encoding" class="form-control" type="text" name="encoding"
-          placeholder="UTF-8" 
+          placeholder="UTF-8"
           value="" />
       </div>
     </div>
