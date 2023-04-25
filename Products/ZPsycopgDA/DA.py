@@ -193,11 +193,8 @@ class Connection(Shared.DC.ZRDB.Connection.Connection):
 
     def get_type_casts(self):
         # note that in both cases order *is* important
-        try:
-            if self.datetime_str:
-                return STRDATETIME, STRDATE, STRTIME
-        except AttributeError:  # datetime_str not present
-            pass
+        if getattr(self, 'datetime_str', False):
+            return STRDATETIME, STRDATE, STRTIME
         if self.zdatetime:
             return ZDATETIME, ZDATE, ZTIME
         else:
