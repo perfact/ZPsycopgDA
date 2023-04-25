@@ -56,17 +56,26 @@ DEFAULT_TILEVEL = psycopg2.extensions.ISOLATION_LEVEL_REPEATABLE_READ
 manage_addZPsycopgConnectionForm = HTMLFile('dtml/add', globals())
 
 
-def manage_addZPsycopgConnection(self, id, title, connection_string,
-                                 zdatetime=None, tilevel=DEFAULT_TILEVEL,
-                                 encoding='', check=None,
-                                 autocommit=None,
-                                 readonlymode=None,
-                                 use_tpc=False,
-                                 REQUEST=None):
+def manage_addZPsycopgConnection(
+        self, id, title, connection_string,
+        zdatetime=None, tilevel=DEFAULT_TILEVEL, encoding='', check=None,
+        autocommit=None, readonlymode=None, use_tpc=False,
+        datetime_str=None,
+        REQUEST=None):
     """Add a DB connection to a folder."""
-    self._setObject(id, Connection(id, title, connection_string,
-                                   zdatetime, check, tilevel, encoding,
-                                   autocommit, readonlymode, use_tpc))
+    self._setObject(id, Connection(
+        id=id,
+        title=title,
+        connection_string=connection_string,
+        zdatetime=zdatetime,
+        check=check,
+        tilevel=tilevel,
+        encoding=encoding,
+        autocommit=autocommit,
+        readonlymode=readonlymode,
+        use_tpc=use_tpc,
+        datetime_str=datetime_str,
+    ))
     if REQUEST is not None:
         return self.manage_main(self, REQUEST)
 
@@ -84,26 +93,37 @@ class Connection(Shared.DC.ZRDB.Connection.Connection):
     zmi_icon = 'fas fa-database text-info'
     zmi_show_add_dialog = True
 
-    def __init__(self, id, title, connection_string,
-                 zdatetime, check=None, tilevel=DEFAULT_TILEVEL,
-                 encoding='UTF-8',
-                 autocommit=False, readonlymode=False,
-                 use_tpc=False):
+    def __init__(
+            self, id, title, connection_string,
+            zdatetime, check=None, tilevel=DEFAULT_TILEVEL,
+            encoding='UTF-8',
+            autocommit=False, readonlymode=False,
+            use_tpc=False, datetime_str=False):
         self.zdatetime = zdatetime
         self.id = str(id)
-        self.edit(title, connection_string, zdatetime,
-                  check=check, tilevel=tilevel, encoding=encoding,
-                  autocommit=autocommit, readonlymode=readonlymode,
-                  use_tpc=use_tpc)
+        self.edit(
+            title=title,
+            connection_string=connection_string,
+            zdatetime=zdatetime,
+            check=check,
+            tilevel=tilevel,
+            encoding=encoding,
+            autocommit=autocommit,
+            readonlymode=readonlymode,
+            use_tpc=use_tpc,
+            datetime_str=datetime_str,
+        )
 
     def factory(self):
         return DB
 
     # connection parameters editing
 
-    def edit(self, title, connection_string,
-             zdatetime, check=None, tilevel=DEFAULT_TILEVEL, encoding='UTF-8',
-             autocommit=False, readonlymode=False, use_tpc=False):
+    def edit(
+            self, title, connection_string,
+            zdatetime, check=None, tilevel=DEFAULT_TILEVEL, encoding='UTF-8',
+            autocommit=False, readonlymode=False, use_tpc=False,
+            datetime_str=False):
         self.title = title
         self.connection_string = connection_string
         self.zdatetime = zdatetime
@@ -112,24 +132,35 @@ class Connection(Shared.DC.ZRDB.Connection.Connection):
         self.autocommit = autocommit
         self.readonlymode = readonlymode
         self.use_tpc = use_tpc
+        self.datetime_str = datetime_str
 
         if check:
             self.connect(self.connection_string)
 
     manage_properties = HTMLFile('dtml/edit', globals())
 
-    def manage_edit(self, title, connection_string,
-                    zdatetime=None, check=None, tilevel=DEFAULT_TILEVEL,
-                    encoding='UTF-8',
-                    autocommit=False,
-                    readonlymode=False,
-                    use_tpc=False,
-                    REQUEST=None):
+    def manage_edit(
+            self, title, connection_string,
+            zdatetime=None, check=None, tilevel=DEFAULT_TILEVEL,
+            encoding='UTF-8',
+            autocommit=False,
+            readonlymode=False,
+            use_tpc=False,
+            datetime_str=False,
+            REQUEST=None):
         """Edit the DB connection."""
-        self.edit(title, connection_string, zdatetime,
-                  check=check, tilevel=tilevel, encoding=encoding,
-                  autocommit=autocommit, readonlymode=readonlymode,
-                  use_tpc=use_tpc)
+        self.edit(
+            title=title,
+            connection_string=connection_string,
+            zdatetime=zdatetime,
+            check=check,
+            tilevel=tilevel,
+            encoding=encoding,
+            autocommit=autocommit,
+            readonlymode=readonlymode,
+            use_tpc=use_tpc,
+            datetime_str=datetime_str,
+        )
         if REQUEST is not None:
             msg = "Connection edited."
             return self.manage_main(self, REQUEST, manage_tabs_message=msg)
@@ -181,6 +212,8 @@ class Connection(Shared.DC.ZRDB.Connection.Connection):
 
     def get_type_casts(self):
         # note that in both cases order *is* important
+        if getattr(self, 'datetime_str', False):
+            return STRDATETIME, STRDATE, STRTIME
         if self.zdatetime:
             return ZDATETIME, ZDATE, ZTIME
         else:
@@ -307,11 +340,17 @@ def _cast_Time(iso, curs):
 def _cast_Interval(iso, curs):
     return iso
 
+def _cast_Str(iso, curs):
+    return iso
 
 ZDATETIME = new_type((1184, 1114), "ZDATETIME", _cast_DateTime)
 ZINTERVAL = new_type((1186,), "ZINTERVAL", _cast_Interval)
 ZDATE = new_type((1082,), "ZDATE", _cast_Date)
 ZTIME = new_type((1083,), "ZTIME", _cast_Time)
+
+STRDATETIME = new_type((1184, 1114), "STRDATETIME", _cast_Str)
+STRDATE = new_type((1082,), "STRDATE", _cast_Str)
+STRTIME = new_type((1083,), "STRTIME", _cast_Str)
 
 
 # table browsing helpers
