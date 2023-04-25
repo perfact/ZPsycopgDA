@@ -64,10 +64,17 @@ def manage_addZPsycopgConnection(
         REQUEST=None):
     """Add a DB connection to a folder."""
     self._setObject(id, Connection(
-        id, title, connection_string,
-        zdatetime, check, tilevel, encoding,
-        autocommit, readonlymode, use_tpc,
-        datetime_str,
+        id=id,
+        title=title,
+        connection_string=connection_string,
+        zdatetime=zdatetime,
+        check=check,
+        tilevel=tilevel,
+        encoding=encoding,
+        autocommit=autocommit,
+        readonlymode=readonlymode,
+        use_tpc=use_tpc,
+        datetime_str=datetime_str,
     ))
     if REQUEST is not None:
         return self.manage_main(self, REQUEST)
@@ -95,10 +102,16 @@ class Connection(Shared.DC.ZRDB.Connection.Connection):
         self.zdatetime = zdatetime
         self.id = str(id)
         self.edit(
-            title, connection_string, zdatetime,
-            check=check, tilevel=tilevel, encoding=encoding,
-            autocommit=autocommit, readonlymode=readonlymode,
-            use_tpc=use_tpc, datetime_str=datetime_str,
+            title=title,
+            connection_string=connection_string,
+            zdatetime=zdatetime,
+            check=check,
+            tilevel=tilevel,
+            encoding=encoding,
+            autocommit=autocommit,
+            readonlymode=readonlymode,
+            use_tpc=use_tpc,
+            datetime_str=datetime_str,
         )
 
     def factory(self):
@@ -137,10 +150,16 @@ class Connection(Shared.DC.ZRDB.Connection.Connection):
             REQUEST=None):
         """Edit the DB connection."""
         self.edit(
-            title, connection_string, zdatetime,
-            check=check, tilevel=tilevel, encoding=encoding,
-            autocommit=autocommit, readonlymode=readonlymode,
-            use_tpc=use_tpc, datetime_str=datetime_str,
+            title=title,
+            connection_string=connection_string,
+            zdatetime=zdatetime,
+            check=check,
+            tilevel=tilevel,
+            encoding=encoding,
+            autocommit=autocommit,
+            readonlymode=readonlymode,
+            use_tpc=use_tpc,
+            datetime_str=datetime_str,
         )
         if REQUEST is not None:
             msg = "Connection edited."
