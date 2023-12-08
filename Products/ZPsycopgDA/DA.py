@@ -45,7 +45,7 @@ except ImportError:
 import psycopg2
 from psycopg2 import NUMBER, STRING, ROWID, DATETIME
 from psycopg2.extensions import INTEGER, FLOAT, BOOLEAN, DATE
-from psycopg2.extensions import TIME
+from psycopg2.extensions import TIME, INTERVAL
 from psycopg2.extensions import new_type
 
 import psycopg2.extensions
@@ -213,11 +213,11 @@ class Connection(Shared.DC.ZRDB.Connection.Connection):
     def get_type_casts(self):
         # note that in both cases order *is* important
         if getattr(self, 'datetime_str', False):
-            return STRDATETIME, STRDATE, STRTIME
+            return STRDATETIME, STRDATE, STRTIME, STRINTERVAL
         if self.zdatetime:
-            return ZDATETIME, ZDATE, ZTIME
+            return ZDATETIME, ZDATE, ZTIME, ZINTERVAL
         else:
-            return DATETIME, DATE, TIME
+            return DATETIME, DATE, TIME, INTERVAL
 
     # browsing and table/column management
 
@@ -346,11 +346,12 @@ def _cast_Str(iso, curs):
 ZDATETIME = new_type((1184, 1114), "ZDATETIME", _cast_DateTime)
 ZINTERVAL = new_type((1186,), "ZINTERVAL", _cast_Interval)
 ZDATE = new_type((1082,), "ZDATE", _cast_Date)
-ZTIME = new_type((1083,), "ZTIME", _cast_Time)
+ZTIME = new_type((1083, 1266), "ZTIME", _cast_Time)
 
 STRDATETIME = new_type((1184, 1114), "STRDATETIME", _cast_Str)
+STRINTERVAL = new_type((1186,), "ZINTERVAL", _cast_Str)
 STRDATE = new_type((1082,), "STRDATE", _cast_Str)
-STRTIME = new_type((1083,), "STRTIME", _cast_Str)
+STRTIME = new_type((1083, 1266), "STRTIME", _cast_Str)
 
 
 # table browsing helpers

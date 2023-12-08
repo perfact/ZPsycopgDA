@@ -1,6 +1,19 @@
 Changelog
 =========
 
+2.4.7.dev1+perfact.8
+--------------------
+
+Extend option datetime_str to cover also time with time zone and
+intervals (#15)
+
+
+2.4.7.dev1+perfact.7
+--------------------
+
+Add option datetime_str (#14)
+
+
 2.4.7.dev1+perfact.6
 --------------------
 
