@@ -366,7 +366,7 @@ class DB(TM, dbi_db.DB):
     def handle_retry(self, error):
         '''Find out if an error deserves a retry.'''
         if self.is_serialization_error(error):
-            raise RetryError
+            raise RetryError from error
 
         connection_error = self.is_connection_error(error)
         server_error = self.is_server_error(error)
@@ -379,9 +379,9 @@ class DB(TM, dbi_db.DB):
             self.getconn().close()
 
         if connection_error:
-            raise RetryError
+            raise RetryError from error
         if server_error:
-            raise RetryDelayError
+            raise RetryDelayError from error
 
     # query execution
     def query(self, query_string, max_rows=None, query_data=None):
