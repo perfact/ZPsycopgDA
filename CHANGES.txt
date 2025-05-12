@@ -1,6 +1,6 @@
 Changelog
 =========
-2.4.7.dev1+perfact.9
+2.4.7.dev1+perfact.10
 --------------------
 
 When raising RetryError and RetryDelayError use from clause to also fill __cause__ attribute
