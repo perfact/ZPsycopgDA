@@ -362,11 +362,26 @@ class DB(TM, dbi_db.DB):
             and 'could not serialize' in value
         )
 
+    @staticmethod
+    def is_spurious_collision_error(error):
+        '''
+        Detect whether the error condition is spurious or transitional and
+        should therefore be retried without delay.
+
+        Examples are deadlocks and records which cannot be touched because they
+        were updated in parallel transactions.
+        '''
+        (name, value) = DB.split_error(error)
+        # TBD
+        return False
 
     def handle_retry(self, error):
         '''Find out if an error deserves a retry.'''
         if self.is_serialization_error(error):
             raise RetryError from error
+
+        if self.is_spurious_collision_error(error):
+            raise RetryError
 
         connection_error = self.is_connection_error(error)
         server_error = self.is_server_error(error)
