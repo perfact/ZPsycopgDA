@@ -381,7 +381,7 @@ class DB(TM, dbi_db.DB):
             raise RetryError from error
 
         if self.is_spurious_collision_error(error):
-            raise RetryError
+            raise RetryError from error
 
         connection_error = self.is_connection_error(error)
         server_error = self.is_server_error(error)
