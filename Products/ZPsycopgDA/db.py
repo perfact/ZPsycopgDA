@@ -296,7 +296,7 @@ class DB(TM, dbi_db.DB):
         c = self.getcursor()
         try:
             c.execute('SELECT * FROM "%s" WHERE 1=0' % table_name)
-        except:
+        except Exception:
             return ()
         self.putconn()
         return self.convert_description(c.description, True)
@@ -368,11 +368,11 @@ class DB(TM, dbi_db.DB):
         Detect whether the error condition is spurious or transitional and
         should therefore be retried without delay.
 
-        Examples are deadlocks and records which cannot be touched because they
-        were updated in parallel transactions.
+        So far, only Deadlock errors fall in this category.
         '''
         (name, value) = DB.split_error(error)
-        # TBD
+        if name == 'DeadlockDetected':
+            return True
         return False
 
     def handle_retry(self, error):
@@ -433,7 +433,6 @@ class DB(TM, dbi_db.DB):
             self.tainted.append(conn)
         raise error
 
-
     def query_inner(self, query_string, max_rows=None, query_data=None):
         conn = self.getconn()
         if conn in self.tainted:
@@ -471,7 +470,7 @@ class DB(TM, dbi_db.DB):
                     if len(res) == max_rows:
                         try:
                             overshoot_result = c.fetchone()
-                        except:
+                        except Exception:
                             overshoot_result = None
                         if overshoot_result:
                             assert False, (

@@ -1,7 +1,16 @@
 Changelog
 =========
+
+2.4.7.dev1+perfact.11
+---------------------
+
+Database Deadlock errors are now handled as RetryErrors, because they fall in
+the category of errors which cannot be completely eradicated in Read Committed
+transaction level, and therefore should be retried.
+
+
 2.4.7.dev1+perfact.10
---------------------
+---------------------
 
 When raising RetryError and RetryDelayError use from clause to also fill __cause__ attribute
 to get better stack trace on Errors with retries.
