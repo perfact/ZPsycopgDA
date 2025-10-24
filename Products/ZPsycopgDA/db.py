@@ -296,7 +296,7 @@ class DB(TM, dbi_db.DB):
         c = self.getcursor()
         try:
             c.execute('SELECT * FROM "%s" WHERE 1=0' % table_name)
-        except:
+        except Exception:
             return ()
         self.putconn()
         return self.convert_description(c.description, True)
@@ -362,10 +362,25 @@ class DB(TM, dbi_db.DB):
             and 'could not serialize' in value
         )
 
+    @staticmethod
+    def is_spurious_collision_error(error):
+        '''
+        Detect whether the error condition is spurious or transitional and
+        should therefore be retried without delay.
+
+        So far, only Deadlock errors fall in this category.
+        '''
+        (name, value) = DB.split_error(error)
+        if name == 'DeadlockDetected':
+            return True
+        return False
 
     def handle_retry(self, error):
         '''Find out if an error deserves a retry.'''
         if self.is_serialization_error(error):
+            raise RetryError from error
+
+        if self.is_spurious_collision_error(error):
             raise RetryError from error
 
         connection_error = self.is_connection_error(error)
@@ -418,7 +433,6 @@ class DB(TM, dbi_db.DB):
             self.tainted.append(conn)
         raise error
 
-
     def query_inner(self, query_string, max_rows=None, query_data=None):
         conn = self.getconn()
         if conn in self.tainted:
@@ -456,7 +470,7 @@ class DB(TM, dbi_db.DB):
                     if len(res) == max_rows:
                         try:
                             overshoot_result = c.fetchone()
-                        except:
+                        except Exception:
                             overshoot_result = None
                         if overshoot_result:
                             assert False, (
