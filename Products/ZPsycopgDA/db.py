@@ -24,6 +24,8 @@ from psycopg2.extensions import register_type
 from psycopg2 import NUMBER, STRING, ROWID, DATETIME
 from psycopg2.pool import AbstractConnectionPool, ThreadedConnectionPool
 
+import threading
+
 try:
     from Zope2.App.startup import RetryError, RetryDelayError
 except ImportError:
@@ -43,11 +45,6 @@ LOG = getLogger('ZPsycopgDA.db')
 
 def get_thread_id():
     '''Global function to retrieve the current thread id.'''
-    try:
-        import thread
-        threading = thread
-    except ImportError:
-        import threading
     return threading.get_ident()
 
 
