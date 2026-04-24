@@ -1,6 +1,15 @@
 Changelog
 =========
 
+2.4.7.dev1+perfact.12
+---------------------
+
+Importing "threading" is now done directly in the header of db.py. The
+try-except block removed by this change is a cause of major slow-down because
+the result is not cached by the interpreter and "import thread" is tried over
+and over again.
+
+
 2.4.7.dev1+perfact.11
 ---------------------
 
